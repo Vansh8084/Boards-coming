@@ -1,4 +1,4 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,29 +7,36 @@
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #ffecd2, #fcb69f);
-        }
-        h1 {
-            color: #ff6f61;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #ffe6e6, #ffc3a0);
             text-align: center;
         }
+        h1 {
+            color: #ff6363;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
         img {
-            max-width: 90%;
-            height: auto;
-            border: 2px solid #ff6f61;
+            width: 70%;
+            max-width: 300px;
             border-radius: 10px;
-            margin: 20px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        p {
+            margin-top: 20px;
+            color: #2c3e50;
+            font-size: 1.2em;
         }
     </style>
 </head>
 <body>
     <h1>SEND 🎁</h1>
-    <img src="paybarcode.jpg" alt="Barcode for Payment">
+    <img src="paybarcode.img" alt="Scan to send a gift">
+    <p>Thank you for making my day special!</p>
 </body>
 </html>
