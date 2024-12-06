@@ -1,229 +1,99 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Countdown to First Board</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: #ffffff;
-      color: #333333;
-      text-align: center;
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #2f4f4f;
-      text-shadow: 2px 2px 5px #aaa;
-    }
-    .countdown {
-      font-size: 3rem;
-      font-weight: bold;
-      padding: 20px;
-      background: #f0f0f0;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      position: relative;
-      margin-bottom: 20px;
-      display: inline-block;
-    }
-    .countdown span {
-      display: inline-block;
-      margin: 0 10px;
-      padding: 15px;
-      background: #ffffff;
-      color: #2f4f4f;
-      border-radius: 10px;
-      font-size: 2.5rem;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-    .schedule {
-      text-align: left;
-      margin-top: 20px;
-      font-size: 1.2rem;
-      background: #f9f9f9;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      width: 70%;
-    }
-    .schedule h2 {
-      margin-bottom: 10px;
-      font-size: 1.5rem;
-      color: #2f4f4f;
-      text-align: center;
-    }
-    .schedule ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    .schedule ul li {
-      margin: 10px 0;
-      line-height: 1.8;
-      color: #2f4f4f;
-    }
-    .credit {
-      margin-top: 30px;
-      font-size: 1rem;
-      color: #2f4f4f;
-      background: #f0f0f0;
-      padding: 10px 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: bold;
-    }
-
-    .faq-section {
-      margin-top: 30px;
-      width: 70%;
-      background: #f9f9f9;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-    .faq-section h2 {
-      font-size: 1.5rem;
-      color: #2f4f4f;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .faq {
-      margin: 10px 0;
-      text-align: left;
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .faq-answer {
-      display: none;
-      margin-top: 10px;
-      font-size: 1.2rem;
-      color: #333333;
-    }
-    .faq:hover {
-      color: #2f4f4f;
-    }
-    .plus-sign {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #2f4f4f;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Countdown</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            overflow: hidden;
+        }
+        h1, h2 {
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 10px;
+        }
+        #countdown {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: white;
+            background: #ff6f61;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #ff8566;
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            animation: fall 3s infinite;
+            opacity: 0.9;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-100vh); }
+            100% { transform: translateY(100vh); }
+        }
+    </style>
 </head>
 <body>
-  <div>
-    <h1>Time Until First Board</h1>
-    <div class="countdown" id="countdown">Loading...</div>
-    <div class="schedule">
-      <h2>Exam Schedule</h2>
-      <ul>
-        <li>● 15 Feb: English</li>
-        <li>● 20 Feb: Science</li>
-        <li>● 25 Feb: Social Science</li>
-        <li>● 28 Feb: Hindi</li>
-        <li>● 10 Mar: Math</li>
-        <li>● 18 Mar: IT</li>
-      </ul>
-    </div>
-  </div>
-  
-  <div class="faq-section">
-    <h2>FAQs</h2>
-    <div class="faq">
-      <span>Who will get A.I.R 1?</span>
-      <span class="plus-sign" onclick="toggleAnswer(this)">+</span>
-      <div class="faq-answer">Ans: Vansh Kumar</div>
-    </div>
-    <div class="faq">
-      <span>Are boards hard or easy?</span>
-      <span class="plus-sign" onclick="toggleAnswer(this)">+</span>
-      <div class="faq-answer">Ans: Hard</div>
-    </div>
-    <div class="faq">
-      <span>Will I pass boards?</span>
-      <span class="plus-sign" onclick="toggleAnswer(this)">+</span>
-      <div class="faq-answer">Ans: No</div>
-    </div>
-    <div class="faq">
-      <span>Who is Bihari?</span>
-      <span class="plus-sign" onclick="toggleAnswer(this)">+</span>
-      <div class="faq-answer">Ans: Lokesh</div>
-    </div>
-    <div class="faq">
-      <span>Why am I reading this?</span>
-      <span class="plus-sign" onclick="toggleAnswer(this)">+</span>
-      <div class="faq-answer">Ans: Because you are an idiot</div>
-    </div>
-  </div>
+    <h1>🎉 Countdown to My Birthday 🎉</h1>
+    <div id="countdown"></div>
+    <button onclick="sendGift()">Send Gift to Me</button>
 
-  <div class="credit">
-    Created by Vansh Kumar
-  </div>
-
-  <script>
-    function startCountdown() {
-      // Target date and time for 15 February 2025 at 00:00:00 in GMT+5:30
-      const targetDate = new Date("2025-02-15T00:00:00+05:30");
-
-      function updateCountdown() {
-        const now = new Date();
-
-        // Convert current device time to GMT+5:30
-        const utcOffset = now.getTimezoneOffset() * 60000; // Offset in milliseconds
-        const currentTimeInIST = new Date(now.getTime() + utcOffset + (5.5 * 60 * 60 * 1000));
-
-        // Time difference between the target and current time
-        const timeLeft = targetDate - currentTimeInIST;
-
-        if (timeLeft > 0) {
-          const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-          document.getElementById("countdown").innerHTML = `
-            <span>${days}d</span> 
-            <span>${hours}h</span> 
-            <span>${minutes}m</span> 
-            <span>${seconds}s</span>`;
-        } else {
-          document.getElementById("countdown").innerHTML = "The countdown has ended!";
-          clearInterval(interval);
+    <!-- Confetti -->
+    <script>
+        const totalConfetti = 100;
+        for (let i = 0; i < totalConfetti; i++) {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.left = Math.random() * 100 + "vw";
+            confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            document.body.appendChild(confetti);
         }
-      }
+    </script>
 
-      // Update countdown every second
-      const interval = setInterval(updateCountdown, 1000);
-    }
+    <script>
+        function updateCountdown() {
+            const targetDate = new Date('2024-12-31T00:00:00');
+            const now = new Date();
+            const diff = targetDate - now;
 
-    // Initialize the countdown
-    startCountdown();
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-    // Function to toggle the answer visibility in FAQ
-    function toggleAnswer(element) {
-      const answer = element.parentNode.querySelector('.faq-answer');
-      if (answer.style.display === "block") {
-        answer.style.display = "none";
-        element.textContent = "+";
-      } else {
-        answer.style.display = "block";
-        element.textContent = "-";
-      }
-    }
-  </script>
+            document.getElementById('countdown').innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            if (diff <= 0) {
+                document.getElementById('countdown').innerText = "🎂 Happy Birthday! 🎂";
+            }
+        }
+
+        function sendGift() {
+            window.location.href = "send_gift.html";
+        }
+
+        setInterval(updateCountdown, 1000);
+    </script>
 </body>
 </html>
