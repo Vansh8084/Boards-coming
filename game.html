@@ -14,13 +14,13 @@
             background-position: center;
             color: white;
             overflow: hidden;
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .header {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             display: flex;
             align-items: center;
@@ -41,29 +41,29 @@
         }
 
         .profile-pic {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 64px;
+            font-size: 48px;
             font-weight: bold;
             color: white;
             margin-bottom: 10px;
         }
 
         .balance {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: bold;
+            text-align: center;
         }
 
         .game-area {
             width: 100%;
-            height: calc(100vh - 200px);
+            flex: 1;
             position: relative;
             overflow: hidden;
-            margin-top: 30px;
         }
 
         .item {
@@ -78,14 +78,13 @@
         }
 
         .footer {
-            position: absolute;
-            bottom: 20px;
             width: 100%;
             text-align: center;
+            padding: 10px 0;
         }
 
         .footer button {
-            padding: 10px 20px;
+            padding: 15px 30px;
             font-size: 18px;
             font-weight: bold;
             background-color: white;
@@ -93,13 +92,21 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer button:hover {
+            background-color: #f1f1f1;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <img src="wrong1.jpg" alt="Back" onclick="goBack()">
-        <div id="tickets">🎟: <span id="ticketCount">7</span></div>
+        <img src="wrong.jpg" alt="Back" onclick="goBack()">
     </div>
 
     <div class="profile">
@@ -115,7 +122,6 @@
 
     <script>
         const username = localStorage.getItem("username") || "Player";
-        const ticketLimit = 7;
         let balance = 0;
 
         function goBack() {
@@ -130,15 +136,8 @@
 
         // Game logic
         const gameArea = document.getElementById("gameArea");
-        const ticketCount = document.getElementById("ticketCount");
-        let tickets = ticketLimit;
 
         function startGame() {
-            if (tickets <= 0) {
-                alert("No tickets left for today!");
-                return;
-            }
-
             gameArea.innerHTML = ""; // Clear game area
             let score = 0;
 
@@ -190,8 +189,6 @@
             alert(`🎉 Congratulations! You've earned ${score} $VNS`);
             balance += score;
             document.getElementById("balance").textContent = `$VNS Balance: ${balance}`;
-            tickets--;
-            ticketCount.textContent = tickets;
         }
     </script>
 </body>
