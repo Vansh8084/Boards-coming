@@ -1,229 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drop Game</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: url('gamebg.jpg') no-repeat center center fixed;
-      background-size: cover;
-      margin: 0;
-      color: white;
-      text-align: center;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-    }
-    .header .back-button {
-      font-size: 20px;
-      cursor: pointer;
-    }
-    .header .tickets {
-      font-size: 18px;
-      background: white;
-      color: black;
-      padding: 5px 15px;
-      border-radius: 15px;
-    }
-    .profile {
-      margin: 30px auto;
-      text-align: center;
-    }
-    .profile-pic {
-      width: 80px;
-      height: 80px;
-      background: #${Math.floor(Math.random() * 16777215).toString(16)};
-      border-radius: 50%;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 36px;
-      font-weight: bold;
-      color: white;
-    }
-    .balance {
-      font-size: 32px;
-      font-weight: bold;
-      margin: 10px 0;
-    }
-    .username {
-      font-size: 18px;
-      opacity: 0.8;
-    }
-    .game-area {
-      position: relative;
-      width: 100%;
-      max-width: 400px;
-      height: 500px;
-      margin: 20px auto;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .item {
-      position: absolute;
-      font-size: 32px;
-      cursor: pointer;
-    }
-    #play-button {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      color: black;
-      border: 2px solid black;
-      border-radius: 8px;
-      padding: 15px 30px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .timer {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.7);
-      color: black;
-      padding: 5px 10px;
-      border-radius: 10px;
-      font-size: 18px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-image: url('arena.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            z-index: 10;
+        }
+
+        .header img {
+            width: 40px;
+            cursor: pointer;
+        }
+
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .balance {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .game-area {
+            width: 100%;
+            height: calc(100vh - 150px);
+            position: relative;
+            overflow: hidden;
+            margin-top: 50px;
+        }
+
+        .item {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .footer button {
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-  <div class="header">
-    <div class="back-button" onclick="goBack()">🔙</div>
-    <div class="tickets">🎟: <span id="tickets-count">7</span></div>
-  </div>
+    <div class="header">
+        <img src="wrong.jpg" alt="Back" onclick="goBack()">
+        <div id="tickets">🎟: <span id="ticketCount">7</span></div>
+    </div>
 
-  <div class="profile">
-    <div class="profile-pic" id="profile-pic"></div>
-    <div class="balance">$<span id="user-balance"></span> VNS</div>
-    <div class="username" id="username"></div>
-  </div>
+    <div class="profile">
+        <div id="profilePic" class="profile-pic"></div>
+        <div id="balance" class="balance">$VNS Balance: 0</div>
+    </div>
 
-  <div class="game-area" id="game-area" style="display: none;">
-    <div class="timer" id="timer">30s</div>
-  </div>
+    <div class="game-area" id="gameArea"></div>
 
-  <button id="play-button" onclick="startGame()">Play Game</button>
+    <div class="footer">
+        <button onclick="startGame()">Play</button>
+    </div>
 
-  <script>
-    // Initialize or retrieve user data from localStorage
-    const user = JSON.parse(localStorage.getItem('user')) || {
-      username: prompt("Enter your username:"),
-      balance: 0,
-      tickets: 7,
-    };
-    localStorage.setItem('user', JSON.stringify(user));
+    <script>
+        const username = localStorage.getItem("username") || "Player";
+        const ticketLimit = 7;
+        let balance = 0;
 
-    // Update UI
-    const usernameDisplay = document.getElementById('username');
-    const balanceDisplay = document.getElementById('user-balance');
-    const ticketsDisplay = document.getElementById('tickets-count');
-    const profilePic = document.getElementById('profile-pic');
-    usernameDisplay.innerText = user.username;
-    balanceDisplay.innerText = user.balance;
-    ticketsDisplay.innerText = user.tickets;
-    profilePic.innerText = user.username[0].toUpperCase();
-
-    // Game settings
-    const gameArea = document.getElementById('game-area');
-    const playButton = document.getElementById('play-button');
-    const timerDisplay = document.getElementById('timer');
-    let timer = 30;
-    let points = 0;
-    let freeze = false;
-
-    function goBack() {
-      alert("Going back!");
-    }
-
-    function startGame() {
-      if (user.tickets <= 0) {
-        alert("No tickets left! Please wait until tomorrow.");
-        return;
-      }
-
-      // Deduct a ticket and update UI
-      user.tickets -= 1;
-      ticketsDisplay.innerText = user.tickets;
-      localStorage.setItem('user', JSON.stringify(user));
-
-      // Game setup
-      playButton.style.display = "none";
-      gameArea.style.display = "block";
-      points = 0;
-      timer = 30;
-      freeze = false;
-
-      // Start timer
-      const timerInterval = setInterval(() => {
-        if (!freeze) timer--;
-        timerDisplay.innerText = `${timer}s`;
-        if (timer <= 0) {
-          clearInterval(timerInterval);
-          endGame();
+        function goBack() {
+            window.location.href = "index.html";
         }
-      }, 1000);
 
-      // Drop items every 10 seconds
-      const dropInterval = setInterval(() => {
-        if (timer <= 0) {
-          clearInterval(dropInterval);
-        } else if (!freeze) {
-          for (let i = 0; i < 100; i++) dropItem("🌼", 1);
-          dropItem("💣", -100);
-          for (let i = 0; i < 3; i++) dropItem("🧊", "freeze");
+        // Generate Profile Picture
+        const profilePic = document.getElementById("profilePic");
+        const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        profilePic.style.backgroundColor = randomColor;
+        profilePic.textContent = username[0].toUpperCase();
+
+        // Game logic
+        const gameArea = document.getElementById("gameArea");
+        const ticketCount = document.getElementById("ticketCount");
+        let tickets = ticketLimit;
+
+        function startGame() {
+            if (tickets <= 0) {
+                alert("No tickets left for today!");
+                return;
+            }
+
+            gameArea.innerHTML = ""; // Clear game area
+            let score = 0;
+            const timerElement = document.createElement("div");
+            timerElement.style.position = "absolute";
+            timerElement.style.top = "10px";
+            timerElement.style.left = "50%";
+            timerElement.style.transform = "translateX(-50%)";
+            timerElement.style.fontSize = "24px";
+            timerElement.style.fontWeight = "bold";
+            gameArea.appendChild(timerElement);
+
+            let timer = 30; // 30 seconds game duration
+            const interval = setInterval(() => {
+                timer--;
+                timerElement.textContent = `Timer: ${timer}s`;
+                if (timer <= 0) {
+                    clearInterval(interval);
+                    endGame(score);
+                }
+            }, 1000);
+
+            // Spawn items
+            for (let i = 0; i < 300; i++) spawnItem("🌼", 1);
+            for (let i = 0; i < 3; i++) spawnItem("💣", -100);
+            for (let i = 0; i < 9; i++) spawnItem("🧊", "freeze");
+
+            function spawnItem(icon, value) {
+                const item = document.createElement("div");
+                item.className = "item";
+                item.textContent = icon;
+                item.style.left = Math.random() * 90 + "%";
+                item.style.top = Math.random() * 80 + "%";
+                item.onclick = () => {
+                    if (value === "freeze") {
+                        timer += 3; // Freeze effect
+                    } else {
+                        score += value;
+                    }
+                    item.remove();
+                };
+                gameArea.appendChild(item);
+            }
         }
-      }, 10000);
-    }
 
-    function dropItem(item, value) {
-      const div = document.createElement("div");
-      div.classList.add("item");
-      div.innerText = item;
-      div.style.left = `${Math.random() * 90}%`;
-      div.style.top = `0px`;
-      gameArea.appendChild(div);
-
-      const fallInterval = setInterval(() => {
-        if (parseInt(div.style.top) > 480) {
-          clearInterval(fallInterval);
-          div.remove();
-        } else {
-          div.style.top = `${parseInt(div.style.top) + 5}px`;
+        function endGame(score) {
+            alert(`🎉 Congratulations! You've earned ${score} $VNS`);
+            balance += score;
+            document.getElementById("balance").textContent = `$VNS Balance: ${balance}`;
+            tickets--;
+            ticketCount.textContent = tickets;
         }
-      }, 50);
-
-      div.addEventListener("click", () => {
-        clearInterval(fallInterval);
-        div.remove();
-        if (value === "freeze") {
-          freeze = true;
-          setTimeout(() => (freeze = false), 3000);
-        } else {
-          points += value;
-        }
-      });
-    }
-
-    function endGame() {
-      gameArea.style.display = "none";
-      playButton.style.display = "block";
-      alert(`🎉 Congratulations! You've earned ${points} $VNS`);
-      user.balance += points;
-      balanceDisplay.innerText = user.balance;
-      localStorage.setItem('user', JSON.stringify(user));
-    }
-  </script>
+    </script>
 </body>
 </html>
