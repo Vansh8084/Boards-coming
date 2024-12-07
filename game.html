@@ -3,270 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maze Runner</title>
+    <title>Clicker Game</title>
     <style>
         body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(45deg, #1e293b, #0f172a);
+            background: #2c3e50;
             color: white;
-            overflow: hidden;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            text-align: center;
         }
 
         h1 {
+            font-size: 3em;
             margin: 20px 0;
-            font-size: 2em;
-            color: #facc15;
+            color: #f39c12;
         }
 
-        #gameCanvas {
-            background: #1f2937;
-            border: 5px solid #facc15;
-            margin: 20px auto;
-            display: block;
+        #score {
+            font-size: 1.8em;
+            margin: 10px 0;
         }
 
-        #gameInfo {
-            display: flex;
-            justify-content: space-between;
-            width: 80%;
-            font-size: 1.2em;
+        #clickTarget {
+            background-color: #e74c3c;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-top: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        #clickTarget:hover {
+            background-color: #c0392b;
+            transform: scale(1.1);
         }
 
         #startButton {
-            margin-top: 20px;
             padding: 10px 20px;
-            font-size: 1.5em;
-            color: white;
-            background-color: #facc15;
+            background-color: #f39c12;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.2em;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            transition: all 0.3s ease;
         }
 
         #startButton:hover {
-            background-color: #eab308;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.5em;
-            }
-            #gameInfo {
-                flex-direction: column;
-                align-items: center;
-            }
-            #startButton {
-                font-size: 1.2em;
-            }
+            background-color: #e67e22;
         }
     </style>
 </head>
 <body>
-    <h1>Maze Runner</h1>
-    <div id="gameInfo">
-        <span id="score">Score: 0</span>
-        <span id="time">Time: 30s</span>
-    </div>
-    <canvas id="gameCanvas" width="600" height="600"></canvas>
-    <button id="startButton">Start Game</button>
+
+    <h1>Clicker Game</h1>
+    <div id="score">Score: 0</div>
+    <div id="clickTarget" onclick="incrementScore()"></div>
+    <button id="startButton" onclick="startGame()">Start Game</button>
 
     <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-        const scoreElement = document.getElementById("score");
-        const timeElement = document.getElementById("time");
-        const startButton = document.getElementById("startButton");
-
-        // Game data saved in localStorage
-        let player = {
-            x: 20, 
-            y: 20, 
-            size: 20, 
-            speed: 5 
-        };
-        let coins = [];
-        let obstacles = [];
         let score = 0;
-        let time = 30;
-        let gameInterval;
-        let timerInterval;
+        let clickTarget = document.getElementById('clickTarget');
+        let scoreElement = document.getElementById('score');
+        let startButton = document.getElementById('startButton');
 
-        // Load saved data from localStorage if available
+        // Load saved score from localStorage
         function loadGameData() {
-            const savedScore = localStorage.getItem("score");
-            const savedTime = localStorage.getItem("time");
-            const savedPlayer = JSON.parse(localStorage.getItem("player"));
-
-            if (savedScore && savedTime && savedPlayer) {
+            const savedScore = localStorage.getItem('score');
+            if (savedScore) {
                 score = parseInt(savedScore);
-                time = parseInt(savedTime);
-                player = savedPlayer;
                 scoreElement.textContent = `Score: ${score}`;
-                timeElement.textContent = `Time: ${time}s`;
             }
         }
 
+        // Save score to localStorage
         function saveGameData() {
-            localStorage.setItem("score", score);
-            localStorage.setItem("time", time);
-            localStorage.setItem("player", JSON.stringify(player));
+            localStorage.setItem('score', score);
         }
 
-        function createCoin() {
-            const size = 15;
-            const x = Math.random() * (canvas.width - size);
-            const y = Math.random() * (canvas.height - size);
-            coins.push({ x, y, size });
-        }
-
-        function createObstacle() {
-            const size = 30;
-            const x = Math.random() * (canvas.width - size);
-            const y = Math.random() * (canvas.height - size);
-            const speed = Math.random() * 2 + 1;
-            const direction = Math.random() > 0.5 ? 1 : -1;
-            obstacles.push({ x, y, size, speed, direction });
-        }
-
-        function drawPlayer() {
-            ctx.fillStyle = "#facc15";
-            ctx.fillRect(player.x, player.y, player.size, player.size);
-        }
-
-        function drawCoins() {
-            coins.forEach((coin) => {
-                ctx.beginPath();
-                ctx.arc(coin.x, coin.y, coin.size / 2, 0, Math.PI * 2);
-                ctx.fillStyle = "#22c55e";
-                ctx.fill();
-                ctx.closePath();
-            });
-        }
-
-        function drawObstacles() {
-            obstacles.forEach((obs) => {
-                ctx.fillStyle = "#ef4444";
-                ctx.fillRect(obs.x, obs.y, obs.size, obs.size);
-            });
-        }
-
-        function updateObstacles() {
-            obstacles.forEach((obs) => {
-                obs.y += obs.speed * obs.direction;
-                if (obs.y <= 0 || obs.y + obs.size >= canvas.height) {
-                    obs.direction *= -1;
-                }
-            });
-        }
-
-        function detectCollisions() {
-            // Player and coin collision
-            coins.forEach((coin, index) => {
-                if (
-                    player.x < coin.x + coin.size &&
-                    player.x + player.size > coin.x &&
-                    player.y < coin.y + coin.size &&
-                    player.y + player.size > coin.y
-                ) {
-                    coins.splice(index, 1);
-                    score += 10;
-                    scoreElement.textContent = `Score: ${score}`;
-                }
-            });
-
-            // Player and obstacle collision
-            obstacles.forEach((obs) => {
-                if (
-                    player.x < obs.x + obs.size &&
-                    player.x + player.size > obs.x &&
-                    player.y < obs.y + obs.size &&
-                    player.y + player.size > obs.y
-                ) {
-                    endGame(false);
-                }
-            });
-        }
-
-        function updateGame() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawPlayer();
-            drawCoins();
-            drawObstacles();
-            updateObstacles();
-            detectCollisions();
-        }
-
+        // Start the game
         function startGame() {
             score = 0;
-            time = 30;
-            coins = [];
-            obstacles = [];
-            player.x = 20;
-            player.y = 20;
             scoreElement.textContent = `Score: ${score}`;
-            timeElement.textContent = `Time: ${time}s`;
-            createCoin();
-            createCoin();
-            createObstacle();
-            createObstacle();
-
-            gameInterval = setInterval(updateGame, 20);
-            timerInterval = setInterval(() => {
-                time--;
-                timeElement.textContent = `Time: ${time}s`;
-                if (time <= 0) {
-                    endGame(true);
-                }
-            }, 1000);
+            loadGameData(); // Load any previously saved score
+            startButton.style.display = 'none'; // Hide the start button after the game starts
+            clickTarget.style.display = 'inline-block'; // Show the click target
         }
 
-        function endGame(won) {
-            clearInterval(gameInterval);
-            clearInterval(timerInterval);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (won) {
-                alert(`Game Over! Final Score: ${score}`);
-            } else {
-                alert("You hit an obstacle! Game Over.");
-            }
-
-            // Save game data before ending
-            saveGameData();
+        // Increment the score when the target is clicked
+        function incrementScore() {
+            score++;
+            scoreElement.textContent = `Score: ${score}`;
+            saveGameData(); // Save the score to localStorage each time it changes
         }
 
-        window.addEventListener("keydown", (e) => {
-            switch (e.key) {
-                case "ArrowUp":
-                    player.y -= player.speed;
-                    if (player.y < 0) player.y = 0;
-                    break;
-                case "ArrowDown":
-                    player.y += player.speed;
-                    if (player.y + player.size > canvas.height)
-                        player.y = canvas.height - player.size;
-                    break;
-                case "ArrowLeft":
-                    player.x -= player.speed;
-                    if (player.x < 0) player.x = 0;
-                    break;
-                case "ArrowRight":
-                    player.x += player.speed;
-                    if (player.x + player.size > canvas.width)
-                        player.x = canvas.width - player.size;
-                    break;
-            }
-        });
-
-        startButton.addEventListener("click", startGame);
-
-        // Load game data from localStorage when page is loaded
+        // Load game data when the page is loaded
         window.onload = loadGameData;
     </script>
+
 </body>
 </html>
