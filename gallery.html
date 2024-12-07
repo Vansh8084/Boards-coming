@@ -1,50 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: radial-gradient(circle, #ffc3a0, #ff9a9e);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-        h1 {
-            color: #ff6363;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-        }
-        .gallery img {
-            max-width: 150px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-        }
-        .gallery img:hover {
-            transform: scale(1.1);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .folder {
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .folder-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      background-color: #f8f8ff;
+      padding: 10px;
+    }
+    .folder-header h3 {
+      margin: 0;
+    }
+    .progress-circle {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: #555;
+    }
+    .progress-emoji {
+      margin-right: 10px;
+    }
+    .chapter-list {
+      display: none; /* Initially hidden */
+      padding: 10px;
+      background-color: #fff;
+    }
+    .chapter {
+      margin-bottom: 8px;
+    }
+    .chapter input[type="checkbox"] {
+      accent-color: green;
+    }
+    .total-progress {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f8f8ff;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .credit {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: white;
+      background-color: gold;
+      padding: 1px;
+      border-radius: 25%;
+      width: 100px;
+      margin-left: calc(50% - 50px);
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+      .folder-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .progress-circle {
+        margin-top: 10px;
+      }
+    }
+
+    /* Circle Progress */
+    .circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: conic-gradient(#4db8ff 0%, #4db8ff var(--progress), #e0e0e0 var(--progress), #e0e0e0 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <h1>😍 Welcome to My Gallery</h1>
-    <div class="gallery">
-        <img src="image1.jpg" alt="Image 1">
-        <img src="image2.jpg" alt="Image 2">
-        <img src="image3.jpg" alt="Image 3">
-        <img src="image4.jpg" alt="Image 4">
+<div style="text-align: center; font-size: 36px; font-weight: bold; margin-top: 20px; color: #333;">
+  PROGRESS TRACKER BOARD
+</div> 
+  <div class="container">
+    <!-- SST -->
+    <div class="folder">
+      <div class="folder-header" onclick="toggleFolder(this)">
+        <h3>SST</h3>
+        <div class="progress-circle">
+          <span class="progress-emoji" id="sst-emoji">😑</span>
+          <span id="sst-progress">0%</span>
+        </div>
+      </div>
+      <div class="chapter-list" data-subject="sst">
+        <h4>History</h4>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 1: The Rise of Nationalism in Europe</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 2: Nationalism in India</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 3: The Making of a Global World</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 4: Print Culture and the Modern World</div>
+        
+        <h4>Civics</h4>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 1: Power Sharing</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 2: Federalism</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 3: Gender, Religion, and Caste</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 4: Political Parties</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 5: Outcomes of Democracy</div>
+        
+        <h4>Geography</h4>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 1: Resources and Development</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 2: Forest and Wildlife Resources</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 3: Water Resources</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 4: Agriculture</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 5: Minerals and Energy Resources</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 6: Manufacturing Industries</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 7: Lifelines of the National Economy (only map)</div>
+        
+        <h4>Economics</h4>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 1: Development</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 2: Sectors of the Indian Economy</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 3: Money and Credit</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('sst')"> Chapter 4: Globalization and the Indian Economy (only a few topics)</div>
+      </div>
     </div>
+
+    <!-- Science -->
+    <div class="folder">
+      <div class="folder-header" onclick="toggleFolder(this)">
+        <h3>Science</h3>
+        <div class="progress-circle">
+          <span class="progress-emoji" id="science-emoji">😑</span>
+          <span id="science-progress">0%</span>
+        </div>
+      </div>
+      <div class="chapter-list" data-subject="science">
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 1: Chemical Reactions and Equations</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 2: Acids, Bases, and Salts</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 3: Metals and Non-metals</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 4: Carbon Compounds</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 5: Life Processes</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 6: Control and Coordination</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 7: How do Organisms Reproduce</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 8: Heredity and Evolution</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 9: Light Reflection and Refraction</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 10: Human Eye and Colorful World</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 11: Electricity</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 12: Magnetic Effects of Electric Current</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 13: Our Environment</div>
+      </div>
+    </div>
+
+    <!-- Math -->
+    <div class="folder">
+      <div class="folder-header" onclick="toggleFolder(this)">
+        <h3>Math</h3>
+        <div class="progress-circle">
+          <span class="progress-emoji" id="math-emoji">😑</span>
+          <span id="math-progress">0%</span>
+        </div>
+      </div>
+      <div class="chapter-list" data-subject="math">
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 1: Real Numbers</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 2: Polynomials</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 3: Pair of Linear Equations in Two Variables</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 4: Quadratic Equations</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 5: Arithmetic Progressions</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 6: Triangles</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 7: Coordinate Geometry</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 8: Introduction to Trigonometry</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 9: Some Applications of Trigonometry</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 10: Circles</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 11: Area Related to Circles</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 12: Surface Areas and Volumes</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 13: Statistics</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 14: Probability</div>
+      </div>
+    </div>
+
+    <div class="total-progress">
+       <div style="text-align: center; font-size: 36px; font-weight: bold; margin-top: 20px; color: #333;">
+  TOTAL PROGRESS
+      <div class="circle" id="total-progress-circle" style="--progress: 0%;"><span id="total-progress-text">0%</span></div>
+      
+</div>
+    </div>
+
+    
+    
+    <div class="credit">
+      <p>CREDIT VANSH</p>
+    </div>
+  </div>
+
+<div style="text-align: center; color: red; font-size: 10px; font-weight: bold; margin-top: 30px;">
+  *NOTE:- YOUR DATA IS STORED IN LOCAL DEVICE STORAGE. CHANGING BROWSER OR CLEARING DATA MAY CAUSE DATA LOSS
+</div>
+  <script>
+    const emojiMap = [
+      "😑", "😐", "🤨", "🤐", "🫡", "🫣", "🤭", "🤪", "😝", "😁"
+    ];
+
+    // Load saved data from localStorage
+    window.onload = function() {
+      const subjects = ['sst', 'science', 'math'];
+      subjects.forEach(subject => {
+        const savedData = JSON.parse(localStorage.getItem(subject) || '[]');
+        const checkboxes = document.querySelectorAll(`div[data-subject="${subject}"] .chapter input[type="checkbox"]`);
+        savedData.forEach(index => {
+          checkboxes[index].checked = true;
+        });
+        updateProgress(subject);
+      });
+    };
+
+    function toggleFolder(folder) {
+      const chapterList = folder.nextElementSibling;
+      chapterList.style.display = chapterList.style.display === "block" ? "none" : "block";
+    }
+
+    function updateProgress(subject) {
+      const chapters = document.querySelectorAll(`div[data-subject="${subject}"] .chapter input[type="checkbox"]`);
+      const totalChapters = chapters.length;
+      const completedChapters = Array.from(chapters).filter(chapter => chapter.checked).length;
+      const progress = Math.floor((completedChapters / totalChapters) * 100);
+      const emojiIndex = Math.min(Math.floor(progress / 10), emojiMap.length - 1);
+
+      // Update the subject progress
+      document.getElementById(`${subject}-progress`).textContent = `${progress}%`;
+      document.getElementById(`${subject}-emoji`).textContent = emojiMap[emojiIndex];
+
+      // Save data to localStorage
+      const checkedIndices = Array.from(chapters).map((checkbox, index) => checkbox.checked ? index : -1).filter(index => index !== -1);
+      localStorage.setItem(subject, JSON.stringify(checkedIndices));
+
+      // Update total progress
+      updateTotalProgress();
+    }
+
+    function updateTotalProgress() {
+      const subjects = ['sst', 'science', 'math'];
+      let totalChapters = 0;
+      let completedChapters = 0;
+
+      subjects.forEach(subject => {
+        const chapters = document.querySelectorAll(`div[data-subject="${subject}"] .chapter input[type="checkbox"]`);
+        totalChapters += chapters.length;
+        completedChapters += Array.from(chapters).filter(chapter => chapter.checked).length;
+      });
+
+      const totalProgress = Math.floor((completedChapters / totalChapters) * 100);
+      document.getElementById('total-progress-circle').style.setProperty('--progress', `${totalProgress}%`);
+      document.getElementById('total-progress-text').textContent = `${totalProgress}%`;
+    }
+  </script>
 </body>
 </html>
