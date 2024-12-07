@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Countdown</title>
+    <title>BOARDMATE</title>
     <style>
         /* Global Styles */
         body {
@@ -14,8 +14,11 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background: linear-gradient(to right, #ff7f50, #ff6347); /* Festive gradient */
-            color: #fff;
+            background-image: url('bg.jpg'); /* Background image */
+            background-size: cover; /* Ensure the image covers the entire screen */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Don't repeat the image */
+            color: #fff; /* White text for contrast */
             overflow: hidden;
             position: relative;
             text-align: center;
@@ -24,145 +27,89 @@
 
         /* Header Styles */
         h1 {
-            font-size: 4em; /* Larger font for header */
+            font-size: 4.8em;
             margin: 0;
-            color: #ffd700; /* Gold color for the title */
-            text-shadow: 0px 0px 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 165, 0, 0.8);
-            animation: glow 1.5s infinite alternate;
-            padding-bottom: 20px; /* Space below header */
+            color: #fff; /* White color for header text */
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            padding-bottom: 20px;
         }
 
         h2 {
-            color: #f0e68c; /* Light golden color */
+            color: #fff; /* White color for subtitle */
             font-size: 1.6em;
             margin: 20px 0;
-            font-weight: 400;
+            font-weight: 500;
+            letter-spacing: 1px;
         }
 
-        #countdown {
-            font-size: 3em;
-            font-weight: bold;
-            background-color: rgba(44, 62, 80, 0.8); /* Dark background for the countdown */
-            padding: 30px 50px;
-            border-radius: 20px;
-            margin: 30px 0;
-            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
-            display: inline-block;
-            color: #ffd700; /* Gold text for the countdown */
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        #countdown p {
-            margin: 0;
-            font-size: 1.5em;
-        }
-
+        /* Button Styles */
         button {
-            padding: 20px 40px;
-            font-size: 1.4em;
+            padding: 18px 36px;
+            font-size: 1.6em;
             font-weight: bold;
             color: #fff;
-            background: #ff6347; /* Vibrant red-orange */
+            background-color: #2C3E50; /* Dark professional background */
             border: none;
             border-radius: 50px;
             cursor: pointer;
             margin: 15px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 320px;
         }
 
         button:hover {
-            transform: scale(1.08);
-            box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.4);
-            background: #ff4500; /* Darker shade on hover */
+            transform: translateY(-5px); /* Hover effect with slight upward movement */
+            box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+            background-color: #34495E; /* Slightly darker shade on hover */
         }
 
-        /* Glowing effect for text */
-        @keyframes glow {
-            0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
-            100% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.9); }
+        button:active {
+            transform: translateY(2px); /* Slight press effect on button */
+            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.1); /* Subtle shadow when clicked */
         }
 
-        /* Confetti effect */
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #ffd700;
-            animation: confetti-fall 5s infinite;
-            opacity: 0.8;
-            z-index: 9999;
+        /* Button Secondary Styles */
+        button.secondary {
+            background-color: #E67E22; /* Vibrant orange for secondary buttons */
         }
 
-        @keyframes confetti-fall {
-            0% { transform: translateY(-100vh) rotate(45deg); }
-            100% { transform: translateY(100vh) rotate(45deg); }
+        button.secondary:hover {
+            background-color: #D35400; /* Darker orange on hover */
         }
 
         /* Mobile Responsiveness */
         @media (max-width: 600px) {
             h1 {
-                font-size: 2.8em;
+                font-size: 3.5em;
             }
             h2 {
                 font-size: 1.4em;
             }
-            #countdown {
-                font-size: 2.3em;
-                padding: 20px;
-            }
             button {
-                font-size: 1.2em;
+                font-size: 1.4em;
                 padding: 16px 32px;
             }
         }
     </style>
 </head>
 <body>
-    <h1>🎉 Countdown 🎉</h1>
-    <h2>To My 16th 🎂 🥳 Together!</h2>
-    <div id="countdown">
-        <p id="timeLeft">Loading...</p>
-    </div>
+    <h1>BOARDMATE</h1>
+    <h2>Your Ultimate Board Progress Tracker</h2>
 
-    <button onclick="sendGift()">Send me a ☕️</button>
+    <!-- New Button for "Buy ☕️" -->
+    <button onclick="buyCoffee()">Buy ☕️</button>
+
     <button onclick="goToBoards()">Boards</button>
-    <button onclick="openGallery()">Track Board Progress</button>
+    <button class="secondary" onclick="openGallery()">Track Board Progress</button>
 
-    <!-- Confetti Animation -->
     <script>
-        const totalConfetti = 150;
-        for (let i = 0; i < totalConfetti; i++) {
-            const confetti = document.createElement('div');
-            confetti.classList.add('confetti');
-            confetti.style.left = Math.random() * 100 + "vw";
-            confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
-            confetti.style.animationDelay = Math.random() * 2 + "s";
-            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
-            document.body.appendChild(confetti);
-        }
-
-        function updateCountdown() {
-            const targetDate = new Date('2024-12-31T00:00:00');
-            const now = new Date();
-            const diff = targetDate - now;
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24)); // Total days left
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); // Remaining hours after days
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)); // Minutes
-            
-
-            document.getElementById('timeLeft').innerText = `${days}d ${hours}h ${minutes}m `;
-
-            if (diff <= 0) {
-                document.getElementById('timeLeft').innerText = "🎂 Happy Birthday! 🎂";
-            }
-        }
-
-        function sendGift() {
-            window.location.href = "send_gift.html";
+        function buyCoffee() {
+            window.location.href = "html"; // You can replace this with the actual URL for buying coffee
         }
 
         function goToBoards() {
@@ -172,8 +119,6 @@
         function openGallery() {
             window.location.href = "gallery.html";
         }
-
-        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
