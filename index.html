@@ -101,11 +101,11 @@
     <h1>BOARDMATE</h1>
     <h2>Your Ultimate Board Progress Tracker</h2>
 
-    <!-- New Button for "Buy Me A ☕️" -->
+    <!-- Buttons -->
     <button onclick="buyCoffee()">Buy ☕️</button>
-
     <button onclick="goToBoards()">Boards</button>
     <button class="secondary" onclick="openGallery()">Track Board Progress</button>
+    <button onclick="openGame()">🎮 GAME</button>
 
     <script>
         function buyCoffee() {
@@ -118,6 +118,10 @@
 
         function openGallery() {
             window.location.href = "gallery.html";
+        }
+
+        function openGame() {
+            window.location.href = "game.html"; // Opens the game page
         }
     </script>
 </body>
