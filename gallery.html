@@ -288,6 +288,95 @@
       document.getElementById("total-progress-circle").style.setProperty('--progress', `${totalProgress}%`);
       document.getElementById("total-progress-circle").textContent = `${Math.round(totalProgress)}%`;
     }
+
+    <script>
+  // Function to save the progress to localStorage
+  function saveProgress() {
+    // Define all subjects
+    const subjects = ["sst", "science", "math"];
+
+    subjects.forEach(subject => {
+      // Get all the checkboxes for the current subject
+      const checkboxes = document.querySelectorAll(`div[data-subject="${subject}"] input[type="checkbox"]`);
+
+      // Create an array of checked states
+      const checkedStates = Array.from(checkboxes).map(checkbox => checkbox.checked);
+
+      // Save the checked states to localStorage under the subject's name
+      localStorage.setItem(subject, JSON.stringify(checkedStates));
+    });
+
+    // Also update progress display after saving
+    subjects.forEach(subject => updateProgress(subject));
+  }
+
+  // Function to load the saved progress from localStorage
+  function loadProgress() {
+    const subjects = ["sst", "science", "math"];
+
+    subjects.forEach(subject => {
+      // Get saved progress from localStorage
+      const savedProgress = localStorage.getItem(subject);
+
+      if (savedProgress) {
+        // Parse the saved data (array of booleans)
+        const checkedStates = JSON.parse(savedProgress);
+
+        // Get the checkboxes for the current subject
+        const checkboxes = document.querySelectorAll(`div[data-subject="${subject}"] input[type="checkbox"]`);
+
+        // Set the checkboxes' checked state based on the saved data
+        checkboxes.forEach((checkbox, index) => {
+          checkbox.checked = checkedStates[index];
+        });
+      }
+
+      // Update the progress display after loading the saved state
+      updateProgress(subject);
+    });
+  }
+
+  // Function to calculate and update the progress for each subject
+  function updateProgress(subject) {
+    const checkboxes = document.querySelectorAll(`div[data-subject="${subject}"] input[type="checkbox"]`);
+    const totalChapters = checkboxes.length;
+    const completedChapters = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+    const progress = (completedChapters / totalChapters) * 100;
+
+    // Update the progress display for the subject
+    const progressCircle = document.querySelector(`#${subject}-progress`);
+    const emoji = document.querySelector(`#${subject}-emoji`);
+    
+    // Update the progress circle
+    progressCircle.innerText = `${Math.round(progress)}%`;
+
+    // Display the emoji based on progress
+    if (progress === 0) {
+      emoji.innerText = "😑"; // No progress
+    } else if (progress < 50) {
+      emoji.innerText = "😕"; // Some progress
+    } else if (progress < 100) {
+      emoji.innerText = "🙂"; // Mostly done
+    } else {
+      emoji.innerText = "🎉"; // Completed
+    }
+
+    // Update the main progress circle
+    const mainCircle = document.querySelector(".circle");
+    mainCircle.style.setProperty("--progress", `${progress}%`);
+  }
+
+  // Event listener to save progress when a checkbox is clicked
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', saveProgress);
+  });
+
+  // Load progress when the page is loaded
+  window.onload = function () {
+    loadProgress();
+  };
+</script>
   </script>
 </body>
 </html>
