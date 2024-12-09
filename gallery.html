@@ -201,14 +201,12 @@
         <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 5: Life Processes</div>
         <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 6: Control and Coordination</div>
         <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 7: How do Organisms Reproduce</div>
-        <<div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 8: Heredity and Evolution</div>
-        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 9: Light – Reflection and Refraction</div>
-        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 10: Human Eye and Colourful World</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 8: Heredity and Evolution</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 9: Light Reflection and Refraction</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 10: Human Eye and Colorful World</div>
         <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 11: Electricity</div>
         <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 12: Magnetic Effects of Electric Current</div>
-        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 13: Sources of Energy</div>
-        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 14: Our Environment</div>
-        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 15: Management of Natural Resources</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('science')"> Chapter 13: Our Environment</div>
       </div>
     </div>
 
@@ -232,72 +230,63 @@
         <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 8: Introduction to Trigonometry</div>
         <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 9: Some Applications of Trigonometry</div>
         <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 10: Circles</div>
-        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 11: Constructions</div>
-        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 12: Areas Related to Circles</div>
-        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 13: Surface Areas and Volumes</div>
-        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 14: Statistics</div>
-        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 15: Probability</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 11: Area Related to Circles</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 12: Surface Areas and Volumes</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 13: Statistics</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('math')"> Chapter 14: Probability</div>
       </div>
     </div>
 
+    <!-- Total Progress -->
     <div class="total-progress">
       <h2>Total Progress</h2>
-      <div class="circle" id="total-progress-circle" style="--progress: 0%;">
-        <span id="total-progress-text">0%</span>
-      </div>
+      <div class="circle" id="total-progress-circle" style="--progress: 0%;">0%</div>
     </div>
 
-    <div class="credit">CREDIT: VANSH</div>
+    <div class="credit">
+      Created by Your Name
+    </div>
   </div>
 
   <script>
+    const subjectChapters = {
+      sst: 24,  // Total chapters in SST
+      science: 13,  // Total chapters in Science
+      math: 14  // Total chapters in Math
+    };
+
     function toggleFolder(folder) {
       const chapterList = folder.nextElementSibling;
-      const isExpanded = chapterList.style.display === 'block';
-      chapterList.style.display = isExpanded ? 'none' : 'block';
+      chapterList.style.display = chapterList.style.display === "none" || chapterList.style.display === "" ? "block" : "none";
     }
 
     function updateProgress(subject) {
-      const subjectFolder = document.querySelector(`.folder[data-subject="${subject}"]`);
-      const chapters = subjectFolder.querySelectorAll('input[type="checkbox"]');
-      const totalChapters = chapters.length;
-      const completedChapters = Array.from(chapters).filter(chapter => chapter.checked).length;
-      const progressPercentage = (completedChapters / totalChapters) * 100;
-
-      const progressElement = subjectFolder.querySelector('.progress-circle span:last-child');
-      const emojiElement = subjectFolder.querySelector('.progress-circle span:first-child');
-
-      progressElement.textContent = `${Math.round(progressPercentage)}%`;
-      updateEmoji(emojiElement, progressPercentage);
-
-      const totalProgressElement = document.getElementById('total-progress-circle');
-      const totalProgressText = document.getElementById('total-progress-text');
+      const checkboxes = document.querySelectorAll(`div[data-subject="${subject}"] input[type="checkbox"]`);
+      const checked = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+      const total = subjectChapters[subject];
+      const progress = (checked / total) * 100;
+      
+      document.getElementById(`${subject}-progress`).textContent = `${Math.round(progress)}%`;
+      document.getElementById(`${subject}-emoji`).textContent = progress === 100 ? "😎" : progress > 0 ? "😊" : "😑";
+      document.getElementById(`${subject}-progress`).style.color = progress === 100 ? "green" : "black";
+      
       updateTotalProgress();
+    }
 
-      function updateEmoji(emojiElement, percentage) {
-        if (percentage === 0) {
-          emojiElement.textContent = '😑';
-        } else if (percentage > 0 && percentage < 50) {
-          emojiElement.textContent = '😕';
-        } else if (percentage >= 50 && percentage < 100) {
-          emojiElement.textContent = '🙂';
-        } else {
-          emojiElement.textContent = '😄';
-        }
-      }
+    function updateTotalProgress() {
+      const subjects = ["sst", "science", "math"];
+      let totalChecked = 0;
+      let totalChapters = 0;
 
-      function updateTotalProgress() {
-        const allSubjects = document.querySelectorAll('.folder');
-        const totalSubjects = allSubjects.length;
-        const completedSubjects = Array.from(allSubjects).filter(folder => {
-          const progress = folder.querySelector('.progress-circle span:last-child').textContent;
-          return parseInt(progress) === 100;
-        }).length;
+      subjects.forEach(subject => {
+        const checked = document.querySelectorAll(`div[data-subject="${subject}"] input[type="checkbox"]:checked`).length;
+        totalChecked += checked;
+        totalChapters += subjectChapters[subject];
+      });
 
-        const totalProgressPercentage = (completedSubjects / totalSubjects) * 100;
-        totalProgressElement.style.setProperty('--progress', `${totalProgressPercentage}%`);
-        totalProgressText.textContent = `${Math.round(totalProgressPercentage)}%`;
-      }
+      const totalProgress = (totalChecked / totalChapters) * 100;
+      document.getElementById("total-progress-circle").style.setProperty('--progress', `${totalProgress}%`);
+      document.getElementById("total-progress-circle").textContent = `${Math.round(totalProgress)}%`;
     }
   </script>
 </body>
