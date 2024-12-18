@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morse Code Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(120deg, #89f7fe, #66a6ff);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+        }
+        .input-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        .morse-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            min-height: 50px;
+            word-wrap: break-word;
+        }
+        .button {
+            background: #66a6ff;
+            color: #fff;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .button:hover {
+            background: #559df6;
+        }
+        .button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Morse Code Converter</h2>
+        <textarea id="textInput" class="input-box" rows="4" placeholder="Enter text or Morse code here..."></textarea>
+        <div id="morseOutput" class="morse-box">Converted text will appear here...</div>
+        <button id="convertToMorse" class="button">Convert to Morse</button>
+        <button id="convertToText" class="button">Convert to Text</button>
+        <button id="copyButton" class="button">Copy Output</button>
+    </div>
+
+    <script>
+        const morseCodeMap = {
+            'a': '.-', 'b': '-...', 'c': '-.-.', 'd': '-..', 'e': '.', 'f': '..-.', 'g': '--.', 'h': '....',
+            'i': '..', 'j': '.---', 'k': '-.-', 'l': '.-..', 'm': '--', 'n': '-.', 'o': '---', 'p': '.--.',
+            'q': '--.-', 'r': '.-.', 's': '...', 't': '-', 'u': '..-', 'v': '...-', 'w': '.--', 'x': '-..-',
+            'y': '-.--', 'z': '--..', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
+            '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----', ' ': '/'
+        };
+
+        const reverseMorseCodeMap = Object.fromEntries(
+            Object.entries(morseCodeMap).map(([key, value]) => [value, key])
+        );
+
+        const textInput = document.getElementById('textInput');
+        const morseOutput = document.getElementById('morseOutput');
+        const convertToMorse = document.getElementById('convertToMorse');
+        const convertToText = document.getElementById('convertToText');
+        const copyButton = document.getElementById('copyButton');
+
+        // Convert text to Morse code
+        convertToMorse.addEventListener('click', () => {
+            const text = textInput.value.toLowerCase();
+            const morseCode = text.split('').map(char => morseCodeMap[char] || '').join(' ');
+            morseOutput.textContent = morseCode || 'Converted text will appear here...';
+        });
+
+        // Convert Morse code to text
+        convertToText.addEventListener('click', () => {
+            const morse = textInput.value.trim();
+            const text = morse.split(' ').map(code => reverseMorseCodeMap[code] || '').join('');
+            morseOutput.textContent = text || 'Converted text will appear here...';
+        });
+
+        // Copy output to clipboard
+        copyButton.addEventListener('click', () => {
+            const textToCopy = morseOutput.textContent;
+            if (textToCopy !== 'Converted text will appear here...') {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    alert('Output copied to clipboard!');
+                }).catch(() => {
+                    alert('Failed to copy output.');
+                });
+            } else {
+                alert('Nothing to copy!');
+            }
+        });
+    </script>
+</body>
+</html>
