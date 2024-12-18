@@ -59,6 +59,11 @@
         .button:active {
             transform: scale(0.95);
         }
+        .credit {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
     </style>
 </head>
 <body>
@@ -70,6 +75,8 @@
         <button id="convertToText" class="button">Convert to Text</button>
         <button id="copyButton" class="button">Copy Output</button>
     </div>
+
+    <p class="credit">Created with ❤️ by Vansh</p>
 
     <script>
         const morseCodeMap = {
@@ -108,13 +115,9 @@
         copyButton.addEventListener('click', () => {
             const textToCopy = morseOutput.textContent;
             if (textToCopy !== 'Converted text will appear here...') {
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    alert('Output copied to clipboard!');
-                }).catch(() => {
-                    alert('Failed to copy output.');
+                navigator.clipboard.writeText(textToCopy).catch(() => {
+                    console.error('Failed to copy output.');
                 });
-            } else {
-                alert('Nothing to copy!');
             }
         });
     </script>
