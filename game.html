@@ -3,112 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clicker Game</title>
+    <title>Click to Play Sound</title>
     <style>
         body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: #2c3e50;
-            color: white;
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
             height: 100vh;
-            text-align: center;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
         }
-
         h1 {
-            font-size: 3em;
-            margin: 20px 0;
-            color: #f39c12;
+            margin-bottom: 20px;
         }
-
-        #score {
-            font-size: 1.8em;
-            margin: 10px 0;
-        }
-
-        #clickTarget {
-            background-color: #e74c3c;
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-top: 30px;
+        img {
+            border: 5px solid black;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        #clickTarget:hover {
-            background-color: #c0392b;
-            transform: scale(1.1);
-        }
-
-        #startButton {
-            padding: 10px 20px;
-            background-color: #f39c12;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-size: 1.2em;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-
-        #startButton:hover {
-            background-color: #e67e22;
         }
     </style>
 </head>
 <body>
-
-    <h1>Clicker Game</h1>
-    <div id="score">Score: 0</div>
-    <div id="clickTarget" onclick="incrementScore()"></div>
-    <button id="startButton" onclick="startGame()">Start Game</button>
+    <h1>Click to See</h1>
+    <img src="vai.png" alt="Picture" width="300" height="300" onclick="playSound()">
+    <audio id="sound" src="fck.mp3"></audio>
 
     <script>
-        let score = 0;
-        let clickTarget = document.getElementById('clickTarget');
-        let scoreElement = document.getElementById('score');
-        let startButton = document.getElementById('startButton');
-
-        // Load saved score from localStorage
-        function loadGameData() {
-            const savedScore = localStorage.getItem('score');
-            if (savedScore) {
-                score = parseInt(savedScore);
-                scoreElement.textContent = `Score: ${score}`;
-            }
+        function playSound() {
+            const audio = document.getElementById('sound');
+            audio.play();
         }
-
-        // Save score to localStorage
-        function saveGameData() {
-            localStorage.setItem('score', score);
-        }
-
-        // Start the game
-        function startGame() {
-            score = 0;
-            scoreElement.textContent = `Score: ${score}`;
-            loadGameData(); // Load any previously saved score
-            startButton.style.display = 'none'; // Hide the start button after the game starts
-            clickTarget.style.display = 'inline-block'; // Show the click target
-        }
-
-        // Increment the score when the target is clicked
-        function incrementScore() {
-            score++;
-            scoreElement.textContent = `Score: ${score}`;
-            saveGameData(); // Save the score to localStorage each time it changes
-        }
-
-        // Load game data when the page is loaded
-        window.onload = loadGameData;
     </script>
-
 </body>
 </html>
