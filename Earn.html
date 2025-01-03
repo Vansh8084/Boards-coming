@@ -8,48 +8,64 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #4facfe, #00f2fe);
-      color: white;
+      background: #000;
+      color: #0ff;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
 
     .container {
-      margin-top: 10%;
-      background: white;
+      background: #111;
       border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      box-shadow: 0 0 20px #0ff;
       max-width: 400px;
-      margin: auto;
+      width: 90%;
+      text-align: center;
     }
 
     h1 {
-      color: #333;
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #0ff;
+    }
+
+    p {
+      font-size: 16px;
+      margin: 10px 0;
     }
 
     button {
       padding: 15px 30px;
-      font-size: 16px;
+      font-size: 18px;
       border: none;
       border-radius: 30px;
-      background: linear-gradient(to right, #4facfe, #00f2fe);
-      color: white;
+      background: linear-gradient(to right, #0ff, #00f);
+      color: #fff;
       cursor: pointer;
       margin-top: 20px;
+      box-shadow: 0 0 10px #0ff;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     button:hover {
-      opacity: 0.9;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #0ff;
     }
 
     #game-container {
       display: none;
       position: relative;
-      margin: 20px auto;
       width: 90%;
       height: 400px;
-      background: linear-gradient(to right, #4facfe, #00f2fe);
+      margin-top: 20px;
+      background: #111;
       border-radius: 20px;
+      box-shadow: 0 0 20px #0ff;
       overflow: hidden;
     }
 
@@ -57,27 +73,49 @@
       position: absolute;
       width: 50px;
       cursor: pointer;
-      animation: fadeInOut 3s infinite;
-    }
-
-    @keyframes fadeInOut {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
     }
 
     #score, #timer {
-      font-size: 20px;
+      font-size: 18px;
+      margin: 10px 0;
+      color: #fff;
+      text-shadow: 0 0 5px #0ff;
+    }
+
+    .tasks {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .task-button {
+      display: inline-block;
+      padding: 15px 30px;
       margin-top: 10px;
+      font-size: 16px;
+      text-decoration: none;
+      background: #007bff;
+      border-radius: 20px;
+      color: #fff;
+      box-shadow: 0 0 10px #007bff;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .task-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #007bff;
     }
   </style>
 </head>
 <body>
   <!-- Home Screen -->
   <div class="container" id="home">
-    <h1>Welcome to Catch the Coin!</h1>
+    <h1>Catch the Coin!</h1>
     <p>Lifetime Score: <span id="lifetime-score">$CATCH 0</span></p>
     <button id="play-button">Play</button>
-    <p>Have a referral code? <a href="#" id="referral-link">Click here</a></p>
+    <div class="tasks">
+      <h3>Tasks</h3>
+      <a href="https://x.com" class="task-button">💎 Make a TON Transaction</a>
+    </div>
   </div>
 
   <!-- Game Screen -->
@@ -88,12 +126,10 @@
 
   <script>
     const lifetimeScoreKey = 'lifetimeScore';
-    const referralBonus = 100;
     const playDuration = 30; // seconds
     const gameContainer = document.getElementById('game-container');
     const lifetimeScoreEl = document.getElementById('lifetime-score');
     const playButton = document.getElementById('play-button');
-    const referralLink = document.getElementById('referral-link');
     const scoreEl = document.getElementById('score');
     const timerEl = document.getElementById('timer');
     let lifetimeScore = localStorage.getItem(lifetimeScoreKey) || 0;
@@ -117,18 +153,10 @@
       startTimer();
     }
 
-    // Referral System
-    referralLink.addEventListener('click', () => {
-      lifetimeScore = parseInt(lifetimeScore) + referralBonus;
-      localStorage.setItem(lifetimeScoreKey, lifetimeScore);
-      lifetimeScoreEl.textContent = `$CATCH ${lifetimeScore}`;
-      alert(`Referral bonus added! Lifetime Score: $CATCH ${lifetimeScore}`);
-    });
-
     // Spawn Coins
     function spawnCoins() {
       const coin = document.createElement('img');
-      coin.src = 'https://img.icons8.com/color/48/coin.png'; // Coin image
+      coin.src = 'coin.png'; // Replace with your local coin image
       coin.classList.add('coin');
 
       // Random position
