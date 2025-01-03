@@ -5,209 +5,166 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catch the Coin</title>
   <style>
+    /* Global Styles */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #000;
-      color: #0ff;
+      color: #fff;
       text-align: center;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       height: 100vh;
-    }
-
-    .container {
-      background: #111;
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 0 20px #0ff;
-      max-width: 400px;
-      width: 90%;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      text-shadow: 0 0 10px #0ff;
-    }
-
-    p {
-      font-size: 16px;
-      margin: 10px 0;
-    }
-
-    button {
-      padding: 15px 30px;
-      font-size: 18px;
-      border: none;
-      border-radius: 30px;
-      background: linear-gradient(to right, #0ff, #00f);
-      color: #fff;
-      cursor: pointer;
-      margin-top: 20px;
-      box-shadow: 0 0 10px #0ff;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px #0ff;
-    }
-
-    #game-container {
-      display: none;
-      position: relative;
-      width: 90%;
-      height: 400px;
-      margin-top: 20px;
-      background: #111;
-      border-radius: 20px;
-      box-shadow: 0 0 20px #0ff;
       overflow: hidden;
     }
 
-    .coin {
-      position: absolute;
-      width: 50px;
+    h1, h2, p {
+      margin: 10px;
+      text-shadow: 0 0 10px #fff;
+    }
+
+    .bold-score {
+      font-size: 48px;
+      font-weight: bold;
+      text-shadow: 0 0 15px #0ff, 0 0 20px #0ff;
+      margin: 20px 0;
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+      display: flex;
+      justify-content: space-around;
+      background: #111;
+      padding: 10px 0;
+      border-top: 2px solid #222;
+      box-shadow: 0 0 10px #0ff;
+    }
+
+    .nav-bar button {
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      color: #fff;
       cursor: pointer;
     }
 
-    #score, #timer {
-      font-size: 18px;
-      margin: 10px 0;
-      color: #fff;
-      text-shadow: 0 0 5px #0ff;
+    .nav-bar button.active {
+      color: #0ff;
+      text-shadow: 0 0 10px #0ff;
     }
 
-    .tasks {
-      margin-top: 20px;
-      text-align: center;
+    /* Sections */
+    .section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 60px);
+    }
+
+    .section.active {
+      display: flex;
+    }
+
+    /* Tasks */
+    .task-box {
+      background: #111;
+      color: #fff;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #0ff;
+      width: 80%;
     }
 
     .task-button {
-      display: inline-block;
-      padding: 15px 30px;
-      margin-top: 10px;
-      font-size: 16px;
-      text-decoration: none;
       background: #007bff;
-      border-radius: 20px;
       color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 10px;
       box-shadow: 0 0 10px #007bff;
-      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .task-button:hover {
-      transform: scale(1.05);
       box-shadow: 0 0 15px #007bff;
     }
   </style>
 </head>
 <body>
-  <!-- Home Screen -->
-  <div class="container" id="home">
-    <h1>Catch the Coin!</h1>
-    <p>Lifetime Score: <span id="lifetime-score">$CATCH 0</span></p>
-    <button id="play-button">Play</button>
-    <div class="tasks">
-      <h3>Tasks</h3>
-      <a href="https://x.com" class="task-button">💎 Make a TON Transaction</a>
+  <!-- Home Section -->
+  <div id="home-section" class="section active">
+    <h1>Welcome to Catch the Coin!</h1>
+    <p class="bold-score" id="score-display">[0 $CATCH]</p>
+    <button id="play-button" class="task-button">Play Game</button>
+  </div>
+
+  <!-- Tasks Section -->
+  <div id="tasks-section" class="section">
+    <h2>Tasks</h2>
+    <div class="task-box">
+      <p>Make a Transaction</p>
+      <button class="task-button" onclick="window.open('https://x.com', '_blank')">💎</button>
     </div>
   </div>
 
-  <!-- Game Screen -->
-  <div id="game-container">
-    <p id="timer">Time Left: 30s</p>
-    <p id="score">Score: $CATCH 0</p>
+  <!-- Referral Section -->
+  <div id="referrals-section" class="section">
+    <h2>Referrals</h2>
+    <p>Earn 100 $CATCH for every referral!</p>
+    <button class="task-button" id="referral-button">Generate Referral Code</button>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="nav-bar">
+    <button class="nav-button active" onclick="navigate('home')">🏠</button>
+    <button class="nav-button" onclick="navigate('tasks')">📋</button>
+    <button class="nav-button" onclick="navigate('referrals')">🫂</button>
   </div>
 
   <script>
-    const lifetimeScoreKey = 'lifetimeScore';
-    const playDuration = 30; // seconds
-    const gameContainer = document.getElementById('game-container');
-    const lifetimeScoreEl = document.getElementById('lifetime-score');
-    const playButton = document.getElementById('play-button');
-    const scoreEl = document.getElementById('score');
-    const timerEl = document.getElementById('timer');
-    let lifetimeScore = localStorage.getItem(lifetimeScoreKey) || 0;
-    let score = 0;
-    let timeLeft = playDuration;
+    const navButtons = document.querySelectorAll('.nav-button');
+    const sections = document.querySelectorAll('.section');
+    const scoreDisplay = document.getElementById('score-display');
+    let lifetimeScore = localStorage.getItem('lifetimeScore') || 0;
 
-    // Display lifetime score
-    lifetimeScoreEl.textContent = `$CATCH ${lifetimeScore}`;
+    // Initialize Lifetime Score
+    scoreDisplay.textContent = `[${lifetimeScore} $CATCH]`;
 
-    // Start Game
-    playButton.addEventListener('click', startGame);
-
-    function startGame() {
-      score = 0;
-      timeLeft = playDuration;
-      updateScore();
-      timerEl.textContent = `Time Left: ${timeLeft}s`;
-      gameContainer.style.display = 'block';
-      document.getElementById('home').style.display = 'none';
-      spawnCoins();
-      startTimer();
-    }
-
-    // Spawn Coins
-    function spawnCoins() {
-      const coin = document.createElement('img');
-      coin.src = 'coin.png'; // Replace with your local coin image
-      coin.classList.add('coin');
-
-      // Random position
-      const x = Math.random() * (gameContainer.offsetWidth - 50);
-      const y = Math.random() * (gameContainer.offsetHeight - 50);
-      coin.style.left = `${x}px`;
-      coin.style.top = `${y}px`;
-
-      coin.addEventListener('click', () => {
-        score++;
-        updateScore();
-        coin.remove();
-        spawnCoins();
+    // Navigation
+    function navigate(sectionId) {
+      sections.forEach(section => {
+        section.classList.remove('active');
+        if (section.id === `${sectionId}-section`) {
+          section.classList.add('active');
+        }
       });
 
-      gameContainer.appendChild(coin);
-      setTimeout(() => {
-        if (coin.parentElement) {
-          coin.remove();
-          spawnCoins();
-        }
-      }, 3000);
+      navButtons.forEach(button => button.classList.remove('active'));
+      document.querySelector(`.nav-button[onclick="navigate('${sectionId}')"]`).classList.add('active');
     }
 
-    // Update Score
-    function updateScore() {
-      scoreEl.textContent = `Score: $CATCH ${score}`;
-    }
+    // Play Button
+    document.getElementById('play-button').addEventListener('click', () => {
+      let gameScore = Math.floor(Math.random() * 100); // Random score for demo
+      lifetimeScore = parseInt(lifetimeScore) + gameScore;
+      localStorage.setItem('lifetimeScore', lifetimeScore);
+      scoreDisplay.textContent = `[${lifetimeScore} $CATCH]`;
+      alert(`You earned ${gameScore} $CATCH!`);
+    });
 
-    // Timer
-    function startTimer() {
-      const timerInterval = setInterval(() => {
-        timeLeft--;
-        timerEl.textContent = `Time Left: ${timeLeft}s`;
-
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          endGame();
-        }
-      }, 1000);
-    }
-
-    // End Game
-    function endGame() {
-      gameContainer.style.display = 'none';
-      document.getElementById('home').style.display = 'block';
-      lifetimeScore = parseInt(lifetimeScore) + score;
-      localStorage.setItem(lifetimeScoreKey, lifetimeScore);
-      lifetimeScoreEl.textContent = `$CATCH ${lifetimeScore}`;
-      alert(`Game Over! You scored $CATCH ${score}.`);
-    }
+    // Referral Button
+    document.getElementById('referral-button').addEventListener('click', () => {
+      const referralBonus = 100;
+      lifetimeScore = parseInt(lifetimeScore) + referralBonus;
+      localStorage.setItem('lifetimeScore', lifetimeScore);
+      scoreDisplay.textContent = `[${lifetimeScore} $CATCH]`;
+      alert(`Referral Bonus: +${referralBonus} $CATCH!`);
+    });
   </script>
 </body>
 </html>
