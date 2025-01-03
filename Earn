@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catch the Coin</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #4facfe, #00f2fe);
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      margin-top: 10%;
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    #game-container {
+      display: none;
+      position: relative;
+      margin: 20px auto;
+      width: 90%;
+      height: 400px;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .coin {
+      position: absolute;
+      width: 50px;
+      cursor: pointer;
+      animation: fadeInOut 3s infinite;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    #score, #timer {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Home Screen -->
+  <div class="container" id="home">
+    <h1>Welcome to Catch the Coin!</h1>
+    <p>Lifetime Score: <span id="lifetime-score">$CATCH 0</span></p>
+    <button id="play-button">Play</button>
+    <p>Have a referral code? <a href="#" id="referral-link">Click here</a></p>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="game-container">
+    <p id="timer">Time Left: 30s</p>
+    <p id="score">Score: $CATCH 0</p>
+  </div>
+
+  <script>
+    const lifetimeScoreKey = 'lifetimeScore';
+    const referralBonus = 100;
+    const playDuration = 30; // seconds
+    const gameContainer = document.getElementById('game-container');
+    const lifetimeScoreEl = document.getElementById('lifetime-score');
+    const playButton = document.getElementById('play-button');
+    const referralLink = document.getElementById('referral-link');
+    const scoreEl = document.getElementById('score');
+    const timerEl = document.getElementById('timer');
+    let lifetimeScore = localStorage.getItem(lifetimeScoreKey) || 0;
+    let score = 0;
+    let timeLeft = playDuration;
+
+    // Display lifetime score
+    lifetimeScoreEl.textContent = `$CATCH ${lifetimeScore}`;
+
+    // Start Game
+    playButton.addEventListener('click', startGame);
+
+    function startGame() {
+      score = 0;
+      timeLeft = playDuration;
+      updateScore();
+      timerEl.textContent = `Time Left: ${timeLeft}s`;
+      gameContainer.style.display = 'block';
+      document.getElementById('home').style.display = 'none';
+      spawnCoins();
+      startTimer();
+    }
+
+    // Referral System
+    referralLink.addEventListener('click', () => {
+      lifetimeScore = parseInt(lifetimeScore) + referralBonus;
+      localStorage.setItem(lifetimeScoreKey, lifetimeScore);
+      lifetimeScoreEl.textContent = `$CATCH ${lifetimeScore}`;
+      alert(`Referral bonus added! Lifetime Score: $CATCH ${lifetimeScore}`);
+    });
+
+    // Spawn Coins
+    function spawnCoins() {
+      const coin = document.createElement('img');
+      coin.src = 'https://img.icons8.com/color/48/coin.png'; // Coin image
+      coin.classList.add('coin');
+
+      // Random position
+      const x = Math.random() * (gameContainer.offsetWidth - 50);
+      const y = Math.random() * (gameContainer.offsetHeight - 50);
+      coin.style.left = `${x}px`;
+      coin.style.top = `${y}px`;
+
+      coin.addEventListener('click', () => {
+        score++;
+        updateScore();
+        coin.remove();
+        spawnCoins();
+      });
+
+      gameContainer.appendChild(coin);
+      setTimeout(() => {
+        if (coin.parentElement) {
+          coin.remove();
+          spawnCoins();
+        }
+      }, 3000);
+    }
+
+    // Update Score
+    function updateScore() {
+      scoreEl.textContent = `Score: $CATCH ${score}`;
+    }
+
+    // Timer
+    function startTimer() {
+      const timerInterval = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = `Time Left: ${timeLeft}s`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          endGame();
+        }
+      }, 1000);
+    }
+
+    // End Game
+    function endGame() {
+      gameContainer.style.display = 'none';
+      document.getElementById('home').style.display = 'block';
+      lifetimeScore = parseInt(lifetimeScore) + score;
+      localStorage.setItem(lifetimeScoreKey, lifetimeScore);
+      lifetimeScoreEl.textContent = `$CATCH ${lifetimeScore}`;
+      alert(`Game Over! You scored $CATCH ${score}.`);
+    }
+  </script>
+</body>
+</html>
