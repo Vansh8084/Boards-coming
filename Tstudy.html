@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Target Boards</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #e8f0ff, #d1e9ff);
+      color: #1a237e; /* Dark navy blue */
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      height: 100vh;
+      text-align: center;
+    }
+    .header {
+      background: white;
+      color: #1a237e;
+      padding: 20px 40px;
+      font-size: 2.5rem;
+      font-weight: bold;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+    .current-time-box {
+      background: white;
+      color: #1a237e;
+      font-size: 1.8rem;
+      font-weight: bold;
+      padding: 10px 30px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      margin: 20px 0;
+    }
+    .timer-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      color: #1a237e;
+      font-size: 2.5rem;
+      font-weight: bold;
+      width: 240px;
+      height: 240px;
+      border-radius: 30px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+    }
+    .timer-box span {
+      font-size: 1.2rem;
+      font-weight: normal;
+      margin-top: 10px;
+    }
+    .stats {
+      display: flex;
+      gap: 20px;
+    }
+    .stat-box {
+      background: white;
+      color: #1a237e;
+      font-size: 1.4rem;
+      font-weight: bold;
+      width: 160px;
+      height: 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+    .dropdown {
+      position: relative;
+      margin: 20px 0;
+    }
+    .dropdown button {
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      background: white;
+      color: #1a237e;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s, color 0.3s;
+    }
+    .dropdown button:hover {
+      background: #1a237e;
+      color: white;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: white;
+      color: #1a237e;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      z-index: 1;
+    }
+    .dropdown-content ul {
+      list-style: none;
+      padding: 0;
+    }
+    .dropdown-content li {
+      margin: 10px 0;
+      font-size: 1.2rem;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    .rules {
+      background: white;
+      color: #1a237e;
+      padding: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      width: 80%;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    .rules-heading {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">TARGET BOARDS</div>
+  <div class="current-time-box" id="current-time">Current Time: 00:00:00</div>
+  <div class="timer-box">
+    <div id="time-left">⏰ 30 min</div>
+    <span id="round-info">Left for Round 1</span>
+  </div>
+  <div class="stats">
+    <div class="stat-box">✔️ Completed: <span id="completed-count">0</span></div>
+    <div class="stat-box">❌ Lost: <span id="lost-count">0</span></div>
+  </div>
+  <div class="dropdown">
+    <button>View Timetable</button>
+    <div class="dropdown-content">
+      <ul>
+        <li>7:30 PM - 8:30 PM: Round 1</li>
+        <li>9:00 PM - 10:30 PM: Round 2</li>
+        <li>11:00 PM - 12:30 PM: Round 3</li>
+        <li>1:00 PM - 2:30 PM: Round 4</li>
+        <li>3:00 PM - 4:30 PM: Round 5</li>
+      </ul>
+    </div>
+  </div>
+  <div class="rules">
+    <div class="rules-heading">⚠️ RULES ⚠️</div>
+    1️⃣. DO NOT DISTRACT.<br>
+    2️⃣. ALSO STUDY IN BREAK IF FEELING TO STUDY.<br>
+    3️⃣. LOKESH NAME KE LADKE SE DUR RHO WO CHAKKE HOTE HAI.<br>
+    4️⃣. ALWAYS RESPECT PERSON NAMED VANSH.<br>
+    5️⃣. DON'T BE PANIC IF GOT LESS MARKS JUST USE FAN AND ROPE.
+  </div>
+
+  <script>
+    const rounds = [
+      { start: "19:30", end: "20:30" },
+      { start: "21:00", end: "22:30" },
+      { start: "23:00", end: "00:30" },
+      { start: "13:00", end: "14:30" },
+      { start: "15:00", end: "16:30" }
+    ];
+
+    function formatTime(date) {
+      return date.toTimeString().split(" ")[0].substring(0, 5); // HH:MM
+    }
+
+    function timeDifference(currentTime, targetTime) {
+      const [currentHours, currentMinutes] = currentTime.split(":").map(Number);
+      const [targetHours, targetMinutes] = targetTime.split(":").map(Number);
+
+      const currentTotalMinutes = currentHours * 60 + currentMinutes;
+      const targetTotalMinutes = targetHours * 60 + targetMinutes;
+
+      return targetTotalMinutes - currentTotalMinutes;
+    }
+
+    function updateTime() {
+      const now = new Date();
+      const currentTime = formatTime(now);
+
+      let roundFound = false;
+
+      for (const [index, round] of rounds.entries()) {
+        if (currentTime >= round.start && currentTime < round.end) {
+          const timeLeft = timeDifference(currentTime, round.end);
+          document.getElementById("time-left").innerText = `⏰ ${timeLeft} min`;
+          document.getElementById("round-info").innerText = `Left for Round ${index + 1}`;
+          roundFound = true;
+          break;
+        }
+      }
+
+      if (!roundFound) {
+        document.getElementById("time-left").innerText = "⏰ Break Time!";
+        document.getElementById("round-info").innerText = "Relax and Prepare!";
+      }
+
+      const hours = now.getHours().toString().padStart(2, "0");
+      const minutes = now.getMinutes().toString().padStart(2, "0");
+      const seconds = now.getSeconds().toString().padStart(2, "0");
+      document.getElementById("current-time").innerText = `Current Time: ${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateTime, 1000);
+  </script>
+</body>
+</html>
