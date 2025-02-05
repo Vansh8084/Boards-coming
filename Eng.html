@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Study Tracker</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f0f0f0;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 28px;
+      text-align: center;
+      font-weight: bold;
+      color: #4a90e2;
+      letter-spacing: 2px;
+    }
+    .folder {
+      margin-bottom: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f5f5f5;
+    }
+    .folder-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 15px;
+      background: #4a90e2;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .chapter-list {
+      display: none;
+      padding: 10px;
+      background: #fafafa;
+      text-align: left;
+    }
+    .chapter {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+    .chapter input {
+      transform: scale(1.2);
+      accent-color: #4a90e2;
+    }
+    .progress-bar-container {
+      height: 8px;
+      background: #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #4a90e2;
+      transition: width 0.5s;
+    }
+    .total-progress {
+      margin-top: 20px;
+      padding: 15px;
+      background: #4a90e2;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>English Study Tracker</h1>
+
+    <!-- Prose Section -->
+    <div class="folder" id="prose-folder">
+      <div class="folder-header" onclick="toggleFolder('prose')">
+        <span>Prose</span>
+        <span id="prose-progress">0%</span>
+      </div>
+      <div class="chapter-list" id="prose-chapters" data-subject="prose">
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('prose')"> A Letter to God</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('prose')"> Nelson Mandela: Long Walk to Freedom</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('prose')"> Two Stories about Flying</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('prose')"> From the Diary of Anne Frank</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('prose')"> Glimpses of India</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('prose')"> Mijbil the Otter</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('prose')"> Madam Rides the Bus</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('prose')"> The Sermon at Benares</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('prose')"> The Proposal (Play)</div>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="prose-bar"></div>
+      </div>
+    </div>
+
+    <!-- Poetry Section -->
+    <div class="folder" id="poetry-folder">
+      <div class="folder-header" onclick="toggleFolder('poetry')">
+        <span>Poetry</span>
+        <span id="poetry-progress">0%</span>
+      </div>
+      <div class="chapter-list" id="poetry-chapters" data-subject="poetry">
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('poetry')"> Dust of Snow</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('poetry')"> Fire and Ice</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('poetry')"> A Tiger in the zoo</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('poetry')"> How to tell the wild</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('poetry')"> The Ball poem</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('poetry')"> Amanda</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('poetry')"> Fog</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('poetry')"> The Trees</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('poetry')"> The Tale of Custard the Dragon</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('poetry')"> For Anne Gregory</div>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="poetry-bar"></div>
+      </div>
+    </div>
+
+    <!-- Drama Section -->
+    <div class="folder" id="drama-folder">
+      <div class="folder-header" onclick="toggleFolder('drama')">
+        <span>FOOTPRINTS</span>
+        <span id="drama-progress">0%</span>
+      </div>
+      <div class="chapter-list" id="drama-chapters" data-subject="drama">
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('drama')"> A Triumph of Surgery</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('drama')"> The Thief's Story</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('drama')"> The Midnight Visitor</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('drama')"> A Question of Trust</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('drama')"> Footprints Without Feet</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('drama')"> The Making of a Scientist</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('drama')"> The Necklace</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('drama')"> Bholi</div>
+        <div class="chapter"><input type="checkbox" onclick="updateProgress('drama')"> The Book That Saved the World</div>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="drama-bar"></div>
+      </div>
+    </div>
+
+    <!-- Total Progress -->
+    <div class="total-progress">
+      <span>Total Progress:</span> <span id="total-progress">0%</span>
+    </div>
+  </div>
+
+  <script>
+    // Store the completed chapters in local storage
+    function saveProgress(subject) {
+      const checkboxes = document.querySelectorAll(`[data-subject="${subject}"] .chapter input`);
+      const checkedIndices = Array.from(checkboxes).map((checkbox, index) => checkbox.checked ? index : -1).filter(i => i !== -1);
+      localStorage.setItem(subject, JSON.stringify(checkedIndices));
+    }
+
+    // Update progress for each subject
+    function updateProgress(subject) {
+      const checkboxes = document.querySelectorAll(`[data-subject="${subject}"] .chapter input`);
+      const totalChapters = checkboxes.length;
+      const completedChapters = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+      const percentage = totalChapters === 0 ? 0 : Math.floor((completedChapters / totalChapters) * 100);
+
+      // Update the subject progress and progress bar
+      document.getElementById(`${subject}-progress`).textContent = `${percentage}%`;
+      document.getElementById(`${subject}-bar`).style.width = `${percentage}%`;
+
+      // Save the state to localStorage
+      saveProgress(subject);
+
+      // Update the total progress
+      updateTotalProgress();
+    }
+
+    // Calculate and update the total progress across all subjects
+    function updateTotalProgress() {
+      const subjects = ['prose', 'poetry', 'drama'];
+      let totalChapters = 0;
+      let completedChapters = 0;
+
+      subjects.forEach(subject => {
+        const checkboxes = document.querySelectorAll(`[data-subject="${subject}"] .chapter input`);
+        totalChapters += checkboxes.length;
+        completedChapters += Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+      });
+
+      const totalPercentage = totalChapters === 0 ? 0 : Math.floor((completedChapters / totalChapters) * 100);
+      document.getElementById('total-progress').textContent = `${totalPercentage}%`;
+    }
+
+    // Toggle folder visibility (open/close)
+    function toggleFolder(subject) {
+      const chapterList = document.getElementById(`${subject}-chapters`);
+      const folder = document.getElementById(`${subject}-folder`);
+      const isOpen = chapterList.style.display === "block";
+
+      // Toggle folder open/close
+      chapterList.style.display = isOpen ? "none" : "block";
+      folder.style.border = isOpen ? "none" : "1px solid #ddd";
+    }
+
+    // Load the progress from localStorage when the page loads
+    document.addEventListener("DOMContentLoaded", () => {
+      const subjects = ['prose', 'poetry', 'drama'];
+
+      subjects.forEach(subject => {
+        const savedData = JSON.parse(localStorage.getItem(subject) || '[]');
+        const checkboxes = document.querySelectorAll(`[data-subject="${subject}"] .chapter input`);
+
+        savedData.forEach(index => {
+          checkboxes[index].checked = true;
+        });
+
+        updateProgress(subject); // Update progress bar and percentage for each subject
+      });
+    });
+  </script>
+</body>
+</html>
